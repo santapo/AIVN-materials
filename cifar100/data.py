@@ -28,6 +28,7 @@ class CIFAR100DataModule(pl.LightningDataModule):
     @property
     def train_transforms(self):
         return transforms.Compose([
+            transforms.RandomHorizontalFlip(p=0.5),
             transforms.ToTensor(),
             self.normalization
         ])
