@@ -1,5 +1,6 @@
 from pytorch_lightning.utilities.cli import LightningCLI
 from pytorch_lightning.callbacks import ModelCheckpoint
+from pytorch_lightning.loggers import WandbLogger
 
 from model import ClassifcationModel
 from data import FlowerDataModule
@@ -8,6 +9,7 @@ from data import FlowerDataModule
 class ClassifcationTrainingCLI(LightningCLI):
     def add_arguments_to_parser(self, parser):
         self._add_callbacks(parser)
+        self._add_wandb_args(parser)
 
     def _add_wandb_args(self, parser):
         parser.add_argument('--use_wandb',
@@ -34,9 +36,8 @@ class ClassifcationTrainingCLI(LightningCLI):
 
     def before_fit(self):
         if self.config['use_wandb']:
-            import wandb
-            wandb.init(project=self.config["wandb_project_name"],
-                        name=self.config["wandb_task_name"])
+            wandb = WandbLogger(project=self.config["wandb_project_name"], name=self.config["wandb_task_name"])
+            wandb.log_hyperparams(self.config)
 
 def cli_main():
     ClassifcationTrainingCLI(ClassifcationModel, FlowerDataModule)

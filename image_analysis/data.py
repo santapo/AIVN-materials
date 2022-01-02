@@ -1,6 +1,6 @@
 import os
 import torch
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torchvision.transforms import InterpolationMode
 import pytorch_lightning as pl
@@ -64,12 +64,3 @@ class FlowerDataModule(pl.LightningDataModule):
 
     def val_dataloader(self):
         return self._dataloader(mode="valid")
-    
-
-if __name__ == "__main__":
-    dm = CIFAR100DataModule()
-    dm.prepare_data()
-    dm.setup()
-    for batch in dm.train_dataloader():
-        print(batch)
-        break
