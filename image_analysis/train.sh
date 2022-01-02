@@ -4,5 +4,8 @@ python cli.py \
     --model.optimizer="sgd" \
     --model.learning_rate=0.1 \
     --data.data_dir="/root/splitted_flowers" \
-    --data.batch_size=128
+    --data.batch_size=128 \
+    --wandb_project_name="Flower Classification" \
+    --wandb_task_name="Vanlina MLP" \
+    --use_wandb
     # --lr_scheduler="torch.optim.lr_scheduler.CosineAnnealingLR"
