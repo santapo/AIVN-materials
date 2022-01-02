@@ -1,4 +1,4 @@
-python cli.py fit \
+python cli.py \
     --trainer.gpus=1 \
     --trainer.max_epochs=200 \
     --model.optimizer="sgd" \

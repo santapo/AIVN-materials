@@ -10,7 +10,7 @@ from models import get_backbone
 class ClassifcationModel(pl.LightningModule):
     def __init__(
         self,
-        model_name: str = "lenet",
+        model_name: str = "vanila",
         num_classes: int = 100,
         optimizer: str = "adam",
         learning_rate: float = 1e-4,

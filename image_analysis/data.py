@@ -10,7 +10,7 @@ class FlowerDataModule(pl.LightningDataModule):
     def __init__(
         self,
         data_dir: str = "./data",
-        image_size = (224, 224),
+        image_size = (32, 32),
         batch_size: int = 64,
         num_workers: int = 4
     ):

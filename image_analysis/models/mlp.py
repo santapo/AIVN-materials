@@ -8,7 +8,7 @@ def mlp_block(input_dim, expand_ratio=2, dropout=0., act_fn=nn.GELU):
         nn.Dropout(dropout))
 
 class VanilaMLP(nn.Module):
-    def __init__(self, input_dim:int, num_classes:int = 5):
+    def __init__(self, input_dim:int = 3072, num_classes:int = 5):
         super().__init__()
 
         self.cfg = [
@@ -25,7 +25,7 @@ class VanilaMLP(nn.Module):
                 input_dim = int(input_dim*t)
 
         self.layers = nn.Sequential(*layers)
-        self.head = nn.Linear()
+        self.head = nn.Linear(input_dim, num_classes)
 
     def forward(self, x):
         B, C, H, W = x.shape
@@ -33,3 +33,11 @@ class VanilaMLP(nn.Module):
         x = self.layers(x)
         x = self.head(x)
         return x
+
+
+if __name__ == "__main__":
+    import torch
+    rand_inp = torch.rand(3, 3, 32, 32)
+    model = VanilaMLP(input_dim=32*32*3, num_classes=5)
+    res = model(rand_inp)
+    print(res.shape)

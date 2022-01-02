@@ -2,7 +2,7 @@ from pytorch_lightning.utilities.cli import LightningCLI
 from pytorch_lightning.callbacks import ModelCheckpoint
 
 from model import ClassifcationModel
-from data import CIFAR100DataModule
+from data import FlowerDataModule
 
 
 class ClassifcationTrainingCLI(LightningCLI):
@@ -18,7 +18,7 @@ class ClassifcationTrainingCLI(LightningCLI):
         })
 
 def cli_main():
-    ClassifcationTrainingCLI(ClassifcationModel, CIFAR100DataModule)
+    ClassifcationTrainingCLI(ClassifcationModel, FlowerDataModule)
 
 if __name__ == "__main__":
     cli_main()
