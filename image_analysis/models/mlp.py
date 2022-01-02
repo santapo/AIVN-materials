@@ -13,19 +13,24 @@ class VanilaMLP(nn.Module):
 
         self.cfg = [
             # n, t, p
-            [2, 1.2, 0. ],
-            [2, 0.8, 0.1],
-            [2, 0.7, 0. ]
+            [2, 0.8, 0.5],
+            [2, 0.8, 0.5],
         ]
 
         layers = []
         for n, t, p in self.cfg:
             for _ in range(n):
-                layers.append(mlp_block(input_dim, expand_ratio=t, dropout=p))
+                layers.append(mlp_block(input_dim, expand_ratio=t, dropout=p, act_fn=nn.ReLU))
                 input_dim = int(input_dim*t)
 
         self.layers = nn.Sequential(*layers)
         self.head = nn.Linear(input_dim, num_classes)
+
+    def _init_weights(self, m):
+        if isinstance(m, nn.Linear):
+            nn.init.trunc_normal_(m.weight, std=0.2)
+            if isinstance(m, nn.Linear) and m.bias is not None:
+                nn.init.constant_(m.bias, 0)
 
     def forward(self, x):
         B, C, H, W = x.shape

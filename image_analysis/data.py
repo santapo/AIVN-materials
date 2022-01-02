@@ -11,7 +11,7 @@ class FlowerDataModule(pl.LightningDataModule):
         self,
         data_dir: str = "./data",
         image_size = (32, 32),
-        batch_size: int = 64,
+        batch_size: int = 32,
         num_workers: int = 4
     ):
         super().__init__()

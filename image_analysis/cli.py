@@ -30,7 +30,7 @@ class ClassifcationTrainingCLI(LightningCLI):
         parser.add_lightning_class_args(ModelCheckpoint, "save_checkpoint")
         parser.set_defaults({
             "save_checkpoint.dirpath": None,
-            "save_checkpoint.filename": '{epoch}-{step}-{val_loss:.2f}',
+            "save_checkpoint.filename": "{epoch}-{step}-{val_loss:.2f}",
             "save_checkpoint.save_top_k": -1
         })
 

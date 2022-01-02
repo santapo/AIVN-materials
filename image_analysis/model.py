@@ -83,13 +83,3 @@ class ClassifcationModel(pl.LightningModule):
         preds = self.forward(images)
         loss = self.loss_fn(preds, labels)
         self.log("test_loss", loss, logger=True)
-
-
-if __name__ == "__main__":
-    from data import CIFAR100DataModule
-    model = ClassifcationModel()
-    datamodule = CIFAR100DataModule(num_workers=0)
-    datamodule.prepare_data()
-    datamodule.setup()
-    trainer = pl.Trainer(gpus=1)
-    trainer.fit(model, datamodule)
