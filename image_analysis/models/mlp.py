@@ -13,14 +13,15 @@ class VanilaMLP(nn.Module):
 
         self.cfg = [
             # n, t, p
-            [2, 0.8, 0.5],
-            [2, 0.8, 0.5],
+            [1, 0.02, 0.5],
+            [1, 1.   , 0.2],
+            [2, 0.8 , 0.2],
         ]
 
         layers = []
         for n, t, p in self.cfg:
             for _ in range(n):
-                layers.append(mlp_block(input_dim, expand_ratio=t, dropout=p, act_fn=nn.ReLU))
+                layers.append(mlp_block(input_dim, expand_ratio=t, dropout=p))
                 input_dim = int(input_dim*t)
 
         self.layers = nn.Sequential(*layers)

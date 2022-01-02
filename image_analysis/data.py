@@ -21,8 +21,8 @@ class FlowerDataModule(pl.LightningDataModule):
         self.num_workers = num_workers
         self.image_size = image_size
 
-        self.mean = torch.tensor([0.5, 0.5, 0.5], dtype=torch.float32) 
-        self.std = torch.tensor([0.5, 0.5, 0.5], dtype=torch.float32) 
+        self.mean = torch.tensor([0.485, 0.456, 0.406], dtype=torch.float32) 
+        self.std = torch.tensor([0.229, 0.224, 0.225], dtype=torch.float32) 
 
     @property
     def normalization(self):
@@ -32,7 +32,11 @@ class FlowerDataModule(pl.LightningDataModule):
     def train_transforms(self):
         return transforms.Compose([
             transforms.Resize(self.image_size, interpolation=InterpolationMode.BICUBIC),
+            transforms.RandomRotation(15),
+            transforms.RandomAffine(translate=(0.08, 0.1), degrees=15),
+            transforms.ColorJitter(),
             transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomInvert(p=0.5),
             transforms.ToTensor(),
             self.normalization
         ])

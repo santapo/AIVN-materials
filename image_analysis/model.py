@@ -11,7 +11,7 @@ class ClassifcationModel(pl.LightningModule):
     def __init__(
         self,
         model_name: str = "vanila",
-        num_classes: int = 100,
+        num_classes: int = 5,
         optimizer: str = "adam",
         learning_rate: float = 1e-4,
         weight_decay: float = 5e-4,
@@ -34,8 +34,8 @@ class ClassifcationModel(pl.LightningModule):
         self.val_metrics = MetricCollection([Accuracy(), F1()])
 
     def forward(self, x):
-        y = self.model.forward(x)
-        x = F.log_softmax(y, dim=-1)
+        x = self.model.forward(x)
+        x = F.log_softmax(x, dim=-1)
         return x
 
     def configure_optimizers(self):
