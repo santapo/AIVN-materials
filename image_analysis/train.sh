@@ -1,6 +1,6 @@
 python cli.py \
     --trainer.gpus=1 \
-    --trainer.max_epochs=200 \
+    --trainer.max_epochs=30 \
     --trainer.default_root_dir='logs/vanila_mlp' \
     --trainer.log_every_n_steps=5 \
     --model.optimizer="adam" \
