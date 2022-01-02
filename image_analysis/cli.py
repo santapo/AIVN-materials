@@ -36,11 +36,15 @@ class ClassifcationTrainingCLI(LightningCLI):
 
     def before_fit(self):
         if self.config['use_wandb']:
-            wandb = WandbLogger(project=self.config["wandb_project_name"], name=self.config["wandb_task_name"])
-            wandb.log_hyperparams(self.config)
+
+            wandb_logger = WandbLogger(project=self.config["wandb_project_name"], name=self.config["wandb_task_name"],
+                                        save_dir=self.trainer.log_dir)
+            wandb_logger.log_hyperparams(self.config)
+            self.trainer.logger = wandb_logger
 
 def cli_main():
-    ClassifcationTrainingCLI(ClassifcationModel, FlowerDataModule)
+    ClassifcationTrainingCLI(ClassifcationModel, FlowerDataModule,
+                            seed_everything_default=42)
 
 if __name__ == "__main__":
     cli_main()
