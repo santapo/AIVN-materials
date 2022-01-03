@@ -7,7 +7,7 @@ from torchmetrics import Accuracy, F1, MetricCollection
 from models import get_backbone
 
 
-class ClassifcationModel(pl.LightningModule):
+class ClassificationModel(pl.LightningModule):
     def __init__(
         self,
         model_name: str = "vanila",
@@ -50,7 +50,7 @@ class ClassifcationModel(pl.LightningModule):
 
     def training_step(self, train_batch, batch_idx):
         # import ipdb; ipdb.set_trace()
-        images, labels = train_batch
+        images, labels, _ = train_batch
         preds = self.forward(images)
         loss = self.loss_fn(preds, labels)
         self.log("loss/train", loss, logger=True)
@@ -65,7 +65,7 @@ class ClassifcationModel(pl.LightningModule):
         super().training_epoch_end(outputs)
 
     def validation_step(self, val_batch, batch_idx):
-        images, labels = val_batch
+        images, labels, _ = val_batch
         preds = self.forward(images)
         loss = self.loss_fn(preds, labels)
         self.log("loss/val", loss, logger=True)
@@ -78,8 +78,10 @@ class ClassifcationModel(pl.LightningModule):
         self.log_dict(calculated_metrics)
         super().validation_epoch_end(outputs)
 
-    def test_step(self, test_batch, batch_idx):
-        images, labels = test_batch
-        preds = self.forward(images)
-        loss = self.loss_fn(preds, labels)
-        self.log("test_loss", loss, logger=True)
+    def predict_step(self, test_batch, batch_idx):
+        (images, labels), images_path = test_batch
+        outs = self.forward(images)
+        
+        pred_prob, pred = outs.topk(1, dim=-1)
+        pred_prob = torch.exp(pred_prob)
+        return pred_prob, pred, labels, images_path

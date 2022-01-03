@@ -8,5 +8,7 @@ seaborn
 Pillow
 opencv-python
 numpy
+wandb
+ipdb
 pytorch_lightning==1.4.9
 jsonargparse[signatures]

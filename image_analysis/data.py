@@ -6,6 +6,10 @@ from torchvision.transforms import InterpolationMode
 import pytorch_lightning as pl
 
 
+class MyImageFolder(datasets.ImageFolder):
+    def __getitem__(self, index):
+        return super(MyImageFolder, self).__getitem__(index), self.imgs[index][0]
+
 class FlowerDataModule(pl.LightningDataModule):
     def __init__(
         self,
@@ -54,10 +58,10 @@ class FlowerDataModule(pl.LightningDataModule):
         if mode == "train":
             is_shuffle = True
             train_path = os.path.join(self.data_dir, "train")
-            data = datasets.ImageFolder(root=train_path, transform=self.train_transforms)
+            data = MyImageFolder(root=train_path, transform=self.train_transforms)
         if mode == "valid":
             valid_path = os.path.join(self.data_dir, "valid")
-            data = datasets.ImageFolder(root=valid_path, transform=self.valid_transforms)
+            data = MyImageFolder(root=valid_path, transform=self.valid_transforms)
         return DataLoader(dataset=data,
                         batch_size=self.batch_size,
                         num_workers=self.num_workers,

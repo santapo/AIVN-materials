@@ -2,7 +2,7 @@ from pytorch_lightning.utilities.cli import LightningCLI
 from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
 
-from model import ClassifcationModel
+from model import ClassificationModel
 from data import FlowerDataModule
 
 
@@ -43,7 +43,7 @@ class ClassifcationTrainingCLI(LightningCLI):
             self.trainer.logger = wandb_logger
 
 def cli_main():
-    ClassifcationTrainingCLI(ClassifcationModel, FlowerDataModule,
+    ClassifcationTrainingCLI(ClassificationModel, FlowerDataModule,
                             seed_everything_default=42)
 
 if __name__ == "__main__":
