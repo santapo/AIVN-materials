@@ -1,19 +1,22 @@
 import torch
-
+from torch.utils.data import Dataset
 
 class KNearestNeighbor:
     def __init__(self):
         pass
 
     def train(self, train_data):
-        X_train = []
-        y_train = []
-        for i in range(len(train_data)):
-            X, y = train_data[i]
-            X_train.append(X)
-            y_train.append(y)
-        self.X_train = torch.stack(X_train, dim=0)
-        self.y_train = torch.tensor(y_train, dtype=torch.int8)
+        if isinstance(train_data, Dataset):
+            X_train = []
+            y_train = []
+            for i in range(len(train_data)):
+                X, y = train_data[i]
+                X_train.append(X)
+                y_train.append(y)
+            self.X_train = torch.stack(X_train, dim=0)
+            self.y_train = torch.tensor(y_train, dtype=torch.int8)
+        else:
+            self.X_train, self.y_train = train_data
 
     def predict(self, X, k):
         num_test = X.shape[0]
