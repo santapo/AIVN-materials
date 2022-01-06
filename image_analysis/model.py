@@ -50,7 +50,7 @@ class ClassificationModel(pl.LightningModule):
 
     def training_step(self, train_batch, batch_idx):
         # import ipdb; ipdb.set_trace()
-        images, labels, _ = train_batch
+        (images, labels), _ = train_batch
         preds = self.forward(images)
         loss = self.loss_fn(preds, labels)
         self.log("loss/train", loss, logger=True)
@@ -65,7 +65,7 @@ class ClassificationModel(pl.LightningModule):
         super().training_epoch_end(outputs)
 
     def validation_step(self, val_batch, batch_idx):
-        images, labels, _ = val_batch
+        (images, labels), _ = val_batch
         preds = self.forward(images)
         loss = self.loss_fn(preds, labels)
         self.log("loss/val", loss, logger=True)
