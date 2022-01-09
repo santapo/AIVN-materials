@@ -1,13 +1,13 @@
 python cli.py \
-    --trainer.gpus=1 \
-    --trainer.max_epochs=200 \
+    --trainer.gpus=0         \
+    --trainer.max_epochs=40 \
     --trainer.default_root_dir='logs/vanila_mlp' \
     --trainer.log_every_n_steps=5 \
-    --model.model_name="mixer" \
+    --model.model_name="vanila" \
     --model.optimizer="adam" \
-    --model.learning_rate=0.0001 \
+    --model.learning_rate=0.001 \
     --model.num_classes=5 \
-    --data.data_dir="/root/splitted_flowers" \
+    --data.data_dir="/home/ubuntu/splitted_flowers" \
     --data.batch_size=32 \
     --wandb_project_name="Flower Classification" \
     --wandb_task_name="Vanlina MLP" \

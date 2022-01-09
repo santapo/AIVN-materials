@@ -1,10 +1,11 @@
 import torch.nn as nn
 
 
-def mlp_block(input_dim, expand_ratio=2, dropout=0., act_fn=nn.GELU):
+def mlp_block(input_dim, output_dim=1000, dropout=0., act_fn=nn.GELU):
     return nn.Sequential(
-        nn.Linear(input_dim, int(input_dim*expand_ratio)),
+        nn.Linear(input_dim, output_dim),
         act_fn(),
+        nn.BatchNorm1d(output_dim),
         nn.Dropout(dropout))
 
 class VanilaMLP(nn.Module):
@@ -12,17 +13,17 @@ class VanilaMLP(nn.Module):
         super().__init__()
 
         self.cfg = [
-            # n, t, p
-            [1, 0.05, 0.5],
-            [1, 1.  , 0.2],
-            [2, 0.8 , 0.2],
+            # n, out, p
+            [1, 1000, 0. ],
+            [1, 500 , 0.2],
+            [2, 200 , 0.2],
         ]
 
         layers = []
-        for n, t, p in self.cfg:
+        for n, out, p in self.cfg:
             for _ in range(n):
-                layers.append(mlp_block(input_dim, expand_ratio=t, dropout=p))
-                input_dim = int(input_dim*t)
+                layers.append(mlp_block(input_dim, output_dim=out, dropout=p))
+                input_dim = out
 
         self.layers = nn.Sequential(*layers)
         self.head = nn.Linear(input_dim, num_classes)
