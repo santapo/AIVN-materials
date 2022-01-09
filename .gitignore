@@ -3,3 +3,4 @@ __pycache__
 *.tar
 VOCdevkit/
 lightning_logs/
+logs/
