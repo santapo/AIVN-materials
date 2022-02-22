@@ -4,3 +4,5 @@ __pycache__
 VOCdevkit/
 lightning_logs/
 logs/
+data/
+*.pth
