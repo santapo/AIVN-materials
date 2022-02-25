@@ -1,6 +1,7 @@
 run_name="little_little"
 data_dir="./data/ll_classes/"
 num_classes=30
+lr=3e-5
 
 python main.py \
     --use_wandb \
@@ -11,7 +12,7 @@ python main.py \
     --num_classes=$num_classes \
     --image_size=224 \
     --batch_size=128 \
-    --lr=1e-3 \
+    --lr=$lr \
     --gpus \
     --num_workers=4 \
     --num_epochs=100 \
@@ -27,7 +28,7 @@ python main.py \
     --num_classes=$num_classes \
     --image_size=224 \
     --batch_size=128 \
-    --lr=1e-3 \
+    --lr=$lr \
     --gpus \
     --num_workers=4 \
     --num_epochs=100 \
@@ -43,7 +44,7 @@ python main.py \
     --num_classes=$num_classes \
     --image_size=224 \
     --batch_size=128 \
-    --lr=1e-3 \
+    --lr=$lr \
     --gpus \
     --num_workers=4 \
     --num_epochs=100 \
@@ -59,7 +60,7 @@ python main.py \
     --num_classes=$num_classes \
     --image_size=224 \
     --batch_size=128 \
-    --lr=1e-3 \
+    --lr=$lr \
     --gpus \
     --num_workers=4 \
     --num_epochs=100 \
