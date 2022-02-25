@@ -1,0 +1,14 @@
+python main.py \
+    --use_wandb \
+    --project_name "AIVN Pretrained" \
+    --run_name="test" \
+    --mode="scratch" \
+    --data_dir="./data/ll_classes/" \
+    --num_classes=100 \
+    --image_size=224 \
+    --batch_size=128 \
+    --lr=1e-3 \
+    --num_workers=4 \
+    --num_epochs=100 \
+    --val_every_n_epochs=1 \
+    --seed=42

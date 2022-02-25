@@ -14,18 +14,18 @@ from common import FineTuningModel, TransferLearningModel
 logger = logging.getLogger("AIVN_pretrained")
 
 
-def get_model(mode, device="cpu"):
-    if args.mode == "finetuning":
+def get_model(mode, num_classes, device="cpu"):
+    if mode == "finetuning":
         model = models.mobilenet_v2(pretrained=True).to(device)
-        model = FineTuningModel(model, args.num_classes, device=device, freeze=True)
-    if args.mode == "pretrained":
+        model = FineTuningModel(model, num_classes, device=device, freeze=True)
+    if mode == "pretrained":
         model = models.mobilenet_v2(pretrained=True).to(device)
-        model = FineTuningModel(model, args.num_classes, device=device, freeze=False)
-    if args.mode == "transfer":
+        model = FineTuningModel(model, num_classes, device=device, freeze=False)
+    if mode == "transfer":
         model = models.mobilenet_v2(pretrained=True).to(device)
-        model = TransferLearningModel(model, args.num_classes, device=device)
-    if args.mode == "scratch":
-        model = models.mobilenet_v2(pretrained=False, num_classes=args.num_classes).to(device)
+        model = TransferLearningModel(model, num_classes, device=device)
+    if mode == "scratch":
+        model = models.mobilenet_v2(pretrained=False, num_classes=num_classes).to(device)
     return model
 
 def main(args):
@@ -36,7 +36,7 @@ def main(args):
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     train_transform = transforms.Compose([
-        transforms.RandomCrop(32, padding=4),
+        transforms.Resize(args.image_size),
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(15),
         transforms.ToTensor(),
@@ -44,14 +44,15 @@ def main(args):
                             std=(0.2675, 0.2565, 0.2761))
     ])
     test_transform = transforms.Compose([
+        transforms.Resize(args.image_size),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5071, 0.4867, 0.4408),
                             std=(0.2675, 0.2565, 0.2761))
     ])
 
-    data_train = datasets.ImageFolder(root=args.data_dir + "/ll_train", transform=train_transform)
-    data_val = datasets.ImageFolder(root=args.data_dir + "/valid", transform=test_transform)
-    data_test = datasets.ImageFolder(root=args.data_dir + "/test", transform=test_transform)
+    data_train = datasets.ImageFolder(root=args.data_dir + "train", transform=train_transform)
+    data_val = datasets.ImageFolder(root=args.data_dir + "valid", transform=test_transform)
+    data_test = datasets.ImageFolder(root=args.data_dir + "test", transform=test_transform)
 
     train_loader = DataLoader(dataset=data_train, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=True)
     val_loader = DataLoader(dataset=data_val, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=False)
@@ -59,7 +60,7 @@ def main(args):
 
     logger.info(f"Data loaded with {len(data_train)} train, {len(data_test)} val imgs and {len(data_test)} test imgs")
 
-    model = get_model(args.mode, device)
+    model = get_model(args.mode, args.num_classes, device)
     loss_fn = nn.CrossEntropyLoss(reduction="mean")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -77,6 +78,7 @@ if __name__ == "__main__":
     parser.add_argument("--project_name", type=str, default="AIVN pretrained")
     parser.add_argument("--run_name", type=str, default="mobilenet_v2")
     parser.add_argument("--mode", type=str, default="finetuning", help="finetuning, pretrained, transfer, scratch")
+    parser.add_argument("--image_size", type=int, default=224)
     parser.add_argument("--lr", type=float, default=0.1),
     parser.add_argument("--gpus", action="store_true", default=False)
     parser.add_argument("--data_dir", type=str, default="data/little_classes")

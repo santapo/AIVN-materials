@@ -4,11 +4,11 @@ import random
 import numpy as np
 import torch
 import torch.nn as nn
-import tqdm
 import wandb
 from torch import Tensor
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 
 def set_seed(seed: int = 42) -> None:
@@ -24,7 +24,7 @@ def set_seed(seed: int = 42) -> None:
 
 
 def train_one_epoch(model: nn.Module,
-                    dataloader: DataLoader,
+                    dataloader,
                     loss_fn: nn.Module,
                     optimizer: Optimizer,
                     scheduler = None,
