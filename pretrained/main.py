@@ -33,7 +33,7 @@ def main(args):
         wandb.init(project=args.project_name, name=args.run_name, config=args)
 
     set_seed(args.seed)
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cuda" if torch.cuda.is_available() and args.gpus else "cpu"
 
     train_transform = transforms.Compose([
         transforms.Resize(args.image_size),
@@ -59,7 +59,6 @@ def main(args):
     test_loader = DataLoader(dataset=data_test, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=False)
 
     logger.info(f"Data loaded with {len(data_train)} train, {len(data_test)} val imgs and {len(data_test)} test imgs")
-
     model = get_model(args.mode, args.num_classes, device)
     loss_fn = nn.CrossEntropyLoss(reduction="mean")
 

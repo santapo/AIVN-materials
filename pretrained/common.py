@@ -90,7 +90,7 @@ class FineTuningModel(nn.Module):
                 param.requires_grad = False
         self.num_classes = num_classes
         self.model.classifier[1] = nn.Linear(1280, self.num_classes)
-        self.model.classifier[1].parameters().requires_grad = True
+        self.model.to(device)
 
     def forward(self, x: Tensor) -> Tensor:
         x = self.model(x)
@@ -104,8 +104,12 @@ class TransferLearningModel(nn.Module):
         self.model.to(device)
         for param in self.model.parameters():
             param.requires_grad = False
-        self.num_classes = num_classes
-        self.fc = nn.Linear(self.model.out_channels, self.num_classes)
+        self.fc = nn.Sequential(
+            nn.Linear(1000, 512),
+            nn.ReLU6(),
+            nn.Dropout(0.2),
+            nn.Linear(512, num_classes)
+        )
         self.fc.to(device)
 
     def forward(self, x: Tensor) -> Tensor:
