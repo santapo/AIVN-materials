@@ -7,9 +7,9 @@ import wandb
 from torch.utils.data import DataLoader
 from torchvision import datasets, models, transforms
 
-from common import train_one_epoch, validate_network, set_seed
-from common import FineTuningModel, TransferLearningModel
-
+import stochnorm
+from common import (FineTuningModel, TransferLearningModel, set_seed,
+                    train_one_epoch, validate_network)
 
 logger = logging.getLogger("AIVN_pretrained")
 
@@ -26,6 +26,8 @@ def get_model(mode, num_classes, device="cpu"):
         model = TransferLearningModel(model, num_classes, device=device)
     if mode == "scratch":
         model = models.mobilenet_v2(pretrained=False, num_classes=num_classes).to(device)
+    if mode == "stochnorm":
+        model = stochnorm.convert_model(models.mobilenet_v2(pretrained=True), p=0.5).to(device)
     return model
 
 def main(args):
@@ -76,7 +78,7 @@ if __name__ == "__main__":
     parser.add_argument("--use_wandb", action="store_true", default=False, help="Use wandb")
     parser.add_argument("--project_name", type=str, default="AIVN pretrained")
     parser.add_argument("--run_name", type=str, default="mobilenet_v2")
-    parser.add_argument("--mode", type=str, default="finetuning", help="finetuning, pretrained, transfer, scratch")
+    parser.add_argument("--mode", type=str, default="finetuning", help="finetuning, pretrained, transfer, scratch, stochnorm")
     parser.add_argument("--image_size", type=int, default=224)
     parser.add_argument("--lr", type=float, default=0.1),
     parser.add_argument("--gpus", action="store_true", default=False)
