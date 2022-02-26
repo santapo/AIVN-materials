@@ -1,0 +1,437 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage[utf8]{vietnam}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language vietnamese
+\language_package auto
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype true
+\use_dash_ligatures false
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+AI VIET NAM - COURSE 2021
+\end_layout
+
+\begin_layout Title
+Pretrained Model - Exercise
+\end_layout
+
+\begin_layout Title
+
+\color red
+\begin_inset CommandInset href
+LatexCommand href
+name "Link Download Data"
+target "https://drive.google.com/drive/folders/1cj_v3_tzsgXpzqXpzxaMuSogv1a_CmoH?usp=sharing"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Mô tả các bộ dữ liệu:
+\end_layout
+
+\begin_layout Standard
+Bộ dữ liệu được chia thành 5 trường hợp được trích xuất từ bộ dữ liệu 
+\begin_inset CommandInset href
+LatexCommand href
+name "BIRDS 400 - SPECIES"
+target "https://www.kaggle.com/gpiosenka/100-bird-species"
+literal "false"
+
+\end_inset
+
+ và bộ dữ liệu 
+\begin_inset CommandInset href
+LatexCommand href
+name "Chest X-ray"
+target "https://www.kaggle.com/tolgadincer/labeled-chest-xray-images"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+little_classes: gồm 30 loài chim khác nhau; dùng chung bộ valid và test
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+ll_train: mỗi loại gồm 100 mẫu ảnh
+\end_layout
+
+\begin_layout Enumerate
+lvl_train: mỗi loại gồm 30 mẫu ảnh
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+many_classes: gồm 400 loài chim khác nhau; dùng chung bộ valid và test
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+ml_train: mỗi loại gồm 100 mẫu ảnh
+\end_layout
+
+\begin_layout Enumerate
+mvl_train: mỗi loại gồm 30 mẫu ảnh
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Bộ Chest X-ray được giữ nguyên gốc
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename birds_400.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename chest_xray.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Bài tập
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Image Classification Baseline
+\series default
+: Cài đặt quá trình huấn luyện cho bài toán phân loại ảnh cho các bộ dữ
+ liệu đã cho và sau đó huấn luyện thử một mô hình bất kỳ để kiểm tra lại.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Fine-tuning
+\series default
+: Cài đặt hàm 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+get_finetune_model()
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ nhận đầu vào là pretrained model bất kỳ và đầu ra là model thỏa mãn điều
+ kiện để sử dụng fine-tuning.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Transfer Learning
+\series default
+: Cài đặt hàm 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+get_transfer_model()
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ nhận đầu vào là pretrained model và một module CNN bất kỳ và đầu ra là
+ model thỏa mãn điều kiện để sử dụng transfer learning.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Pretrained
+\series default
+: Cài đặt hàm 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+get_pretrained_model
+\emph default
+()
+\emph on
+
+\begin_inset Quotes erd
+\end_inset
+
+
+\emph default
+ nhận đầu vào là pretrained model bất kỳ và đầu ra là model đã được chỉnh
+ sửa cho phù hợp và các layer đều có khả năng cập nhật tham số.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Training
+\series default
+: Chọn một model bất kỳ để thực hiện các quá trình huấn luyện sau với 5
+ bộ dữ liệu đã cho:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Training với bộ tham số của mô hình được khởi tạo ngẫu nhiên bằng các phương
+ pháp như He initialization, Glorot initialization...
+\end_layout
+
+\begin_layout Enumerate
+Training với mô hình được trả ra từ hàm 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+get_finetune_model()
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Training với mô hình được trả ra từ hàm 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+get_transfer_model()
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Training với mô hình được trả ra từ hàm 
+\begin_inset Quotes eld
+\end_inset
+
+
+\emph on
+get_pretrained_model()
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+
+\series bold
+Image Retrieval
+\series default
+: Sử dụng pretrained model từ ImageNet để thực hiện bài toán Image Retrieval
+ trên một bộ dữ liệu đã cho.
+ Sau đó huấn luyện lại model trên bộ dữ liệu đó và thực hiện lại bài toán
+ Image Retrieval.
+ Nhận xét kết quả.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+StochNorm
+\series default
+: Tìm hiểu về kỹ thuật StochNorm qua bài báo 
+\begin_inset CommandInset href
+LatexCommand href
+name "Stochastic Normalization"
+target "https://papers.nips.cc/paper/2020/file/bc573864331a9e42e4511de6f678aa83-Paper.pdf"
+literal "false"
+
+\end_inset
+
+ và cài đặt lại bằng cách hoàn thiện phần code đã cho theo 
+\begin_inset CommandInset href
+LatexCommand href
+name "notebook"
+target "https://colab.research.google.com/drive/1T5QltwwwYB1ZBkH0dZzraGbIKJy9bLQW?usp=sharing"
+literal "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+
+\series bold
+Bi-tuning
+\series default
+ (Optional): Tìm hiểu về kỹ thuật Bi-tuning qua bài báo 
+\begin_inset CommandInset href
+LatexCommand href
+name "BI-TUNING OF PRE-TRAINED REPRESENTATIONS"
+target "https://arxiv.org/pdf/2011.06182.pdf"
+literal "false"
+
+\end_inset
+
+ và cài đặt lại.
+\end_layout
+
+\end_body
+\end_document
