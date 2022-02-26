@@ -71,6 +71,7 @@ def main(args):
         train_one_epoch(model, train_loader, loss_fn, optimizer, scheduler=scheduler, device=device, use_wandb=args.use_wandb)
         if (epoch % args.val_every_n_epochs) == 0:
             accuracy = validate_network(model, val_loader, loss_fn, device=device, use_wandb=args.use_wandb)
+    torch.save(model.state_dict(), "mobilenetv2.pt")    # save model after training
 
 
 if __name__ == "__main__":
