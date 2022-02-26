@@ -36,7 +36,7 @@ def main(args):
     device = "cuda" if torch.cuda.is_available() and args.gpus else "cpu"
 
     train_transform = transforms.Compose([
-        transforms.Resize(args.image_size),
+        transforms.Resize(size=(args.image_size, args.image_size)),
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(15),
         transforms.ToTensor(),
@@ -44,7 +44,7 @@ def main(args):
                             std=(0.2675, 0.2565, 0.2761))
     ])
     test_transform = transforms.Compose([
-        transforms.Resize(args.image_size),
+        transforms.Resize(size=(args.image_size, args.image_size)),
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.5071, 0.4867, 0.4408),
                             std=(0.2675, 0.2565, 0.2761))
@@ -52,13 +52,13 @@ def main(args):
 
     data_train = datasets.ImageFolder(root=args.data_dir + "train", transform=train_transform)
     data_val = datasets.ImageFolder(root=args.data_dir + "valid", transform=test_transform)
-    data_test = datasets.ImageFolder(root=args.data_dir + "test", transform=test_transform)
+    # data_test = datasets.ImageFolder(root=args.data_dir + "test", transform=test_transform)
 
     train_loader = DataLoader(dataset=data_train, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=True)
     val_loader = DataLoader(dataset=data_val, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=False)
-    test_loader = DataLoader(dataset=data_test, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=False)
+    # test_loader = DataLoader(dataset=data_test, batch_size=args.batch_size, num_workers=args.num_workers, shuffle=False)
 
-    logger.info(f"Data loaded with {len(data_train)} train, {len(data_test)} val imgs and {len(data_test)} test imgs")
+    logger.info(f"Data loaded with {len(data_train)} train, {len(data_val)} val imgs")
     model = get_model(args.mode, args.num_classes, device)
     loss_fn = nn.CrossEntropyLoss(reduction="mean")
 

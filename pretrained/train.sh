@@ -1,5 +1,5 @@
-run_name="little_little"
-data_dir="./data/ll_classes/"
+run_name="chest_xray"
+data_dir="./data/chest_xray/"
 num_classes=30
 lr=3e-5
 
