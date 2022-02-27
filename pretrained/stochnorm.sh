@@ -61,3 +61,19 @@ python main.py \
     --use_wandb \
     --project_name "AIVN Pretrained" \
     --run_name="many_very_little stochnorm"
+
+python main.py \
+    --mode="stochnorm" \
+    --data_dir="./data/chest_xray/" \
+    --num_classes=2 \
+    --image_size=224 \
+    --batch_size=128 \
+    --lr=3e-5 \
+    --gpus \
+    --num_workers=4 \
+    --num_epochs=100 \
+    --val_every_n_epochs=1 \
+    --seed=42 \
+    --use_wandb \
+    --project_name "AIVN Pretrained" \
+    --run_name="chest_xray stochnorm"
