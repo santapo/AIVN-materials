@@ -27,7 +27,9 @@ def get_model(mode, num_classes, device="cpu"):
     if mode == "scratch":
         model = models.mobilenet_v2(pretrained=False, num_classes=num_classes).to(device)
     if mode == "stochnorm":
-        model = stochnorm.convert_model(models.mobilenet_v2(pretrained=True), p=0.5).to(device)
+        model = models.mobilenet_v2(pretrained=True).to(device)
+        model = FineTuningModel(model, num_classes, device=device, freeze=False)
+        model = stochnorm.convert_model(model, p=0.5).to(device)
     return model
 
 def main(args):
