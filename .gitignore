@@ -164,3 +164,4 @@ cython_debug/
 # http://www.lyx.org/
 *.lyx~
 *.lyx#
+samples/
