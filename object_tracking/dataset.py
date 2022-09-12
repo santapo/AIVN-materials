@@ -32,8 +32,13 @@ class VOT14Reader:
             all_images.append(image)
             all_images_name.append(image_path)
 
-        groundtruth = [np.array([float(pts) for pts in polygon.split(",")], dtype=np.int32).reshape(-1, 1, 2) \
-                            for polygon in groundtruth]
+        all_tlwh_gt = []
+        for polygon in groundtruth:
+            polygon = [float(pts) for pts in polygon.split(",")]
+            polygon = np.array(polygon, dtype=np.int32).reshape(-1, 1, 2)
+            all_tlwh_gt.append([polygon[0][0][0], polygon[1][0][1],
+                                polygon[2][0][0] - polygon[0][0][0],
+                                polygon[3][0][1] - polygon[1][0][1]])
 
-        return all_images, groundtruth, all_images_name
+        return all_images, all_tlwh_gt, all_images_name
 
