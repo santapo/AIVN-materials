@@ -3,6 +3,10 @@ from typing import List
 import cv2
 import numpy as np
 
+import logging
+
+logger = logging.getLogger()
+
 
 class Tracker:
     def __init__(self, *args, **kwargs):
@@ -22,6 +26,7 @@ class ColorMSTracker(Tracker):
         self.roi_hist = cv2.normalize(self.roi_hist, None, 0, 255, cv2.NORM_MINMAX)
 
         self.term_crit = term_crit
+        logger.info(f"Init {self.__class__.__name__} Successfully!")
 
     def track(self, frame: np.ndarray, window: List[int]):
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
