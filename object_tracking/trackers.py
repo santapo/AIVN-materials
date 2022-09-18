@@ -19,7 +19,7 @@ class Tracker:
 class ColorMSTracker(Tracker):
     def __init__(self, tracked_window, term_crit=None):
         super(ColorMSTracker, self).__init__()
-        
+
         hsv_roi = cv2.cvtColor(tracked_window, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv_roi, np.array((0., 60., 32.)), np.array((180., 255., 255)))
         self.roi_hist = cv2.calcHist([hsv_roi], [0], mask, [180], [0, 180])
