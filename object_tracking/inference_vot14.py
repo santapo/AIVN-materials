@@ -16,7 +16,6 @@ roi = frame[polygon[1]:polygon[1] + polygon[3],
 term_crit = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
 tracker = ColorMSTracker(tracked_window=roi, term_crit=term_crit)
 
-
 for frame in sample[0][1:]:
     polygon = tracker.track(frame, polygon)
     x, y, w, h = polygon

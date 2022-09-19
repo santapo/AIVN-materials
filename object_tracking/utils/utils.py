@@ -13,8 +13,8 @@ def compute_iou(bbox1: List[Union[int, float]], bbox2: List[Union[int, float]]) 
         float: IOU value
     """
 
-    assert all(type(ele) in [int, float] for ele in bbox1), "bbox1 coordinates must be numbers"
-    assert all(type(ele) in [int, float] for ele in bbox2), "bbox2 coordinates must be numbers"
+    # assert all(type(ele) in [int, float] for ele in bbox1), "bbox1 coordinates must be numbers"
+    # assert all(type(ele) in [int, float] for ele in bbox2), "bbox2 coordinates must be numbers"
     assert all(ele > 0 for ele in bbox1), "bbox1 coordinates must be positive"
     assert all(ele > 0 for ele in bbox2), "bbox2 coordinates must be positive"
 
