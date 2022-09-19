@@ -15,8 +15,8 @@ def compute_iou(bbox1: List[Union[int, float]], bbox2: List[Union[int, float]]) 
 
     # assert all(type(ele) in [int, float] for ele in bbox1), "bbox1 coordinates must be numbers"
     # assert all(type(ele) in [int, float] for ele in bbox2), "bbox2 coordinates must be numbers"
-    assert all(ele > 0 for ele in bbox1), "bbox1 coordinates must be positive"
-    assert all(ele > 0 for ele in bbox2), "bbox2 coordinates must be positive"
+    assert all(ele >= 0 for ele in bbox1), f"bbox1 coordinates must be positive, but recieved {bbox1}"
+    assert all(ele >= 0 for ele in bbox2), f"bbox2 coordinates must be positive, but recieved {bbox2}"
 
     # convert (x,y,w,h) to (x1,y1,x2,y2)
     bbox1_x1 = bbox1[0]
@@ -39,6 +39,4 @@ def compute_iou(bbox1: List[Union[int, float]], bbox2: List[Union[int, float]]) 
         return 0
     union_area = bbox1[2]*bbox1[3] + bbox2[2]*bbox2[3] - intersection_area
     return intersection_area / union_area
-
-
 

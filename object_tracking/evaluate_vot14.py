@@ -1,7 +1,10 @@
-from utils.utils import compute_iou
-import cv2
 import logging
+
+import cv2
 from tqdm import tqdm
+import matplotlib.pyplot as plt
+
+from utils.utils import compute_iou
 
 logger = logging.getLogger()
 
@@ -101,8 +104,29 @@ class VOT14Evaluator:
     def get_robustness():
         ...
 
-    # def plot_accuracy_by_frame():
-    #     ...
+    def draw_iou_record(self, sample_index, run_index):
+        record = self.all_records[sample_index][run_index]
+        record_size = len(record["status"])
 
-    # def plot_robustness():
-    #     ...
+        track_chunks = []
+        chunk = []
+        for idx, status in enumerate(record["status"]):
+            if status != "track":
+                if len(chunk) != 0: track_chunks.append(chunk)
+                chunk = []
+                continue
+            chunk.append(idx)
+
+        fig = plt.figure(figsize=(24, 6))
+        ax = plt.axes()
+
+        ax.set(xlim=(0, record_size), ylim=(record["iou_threshold"] * 0.9, 1),
+               xlabel='frame', ylabel='IOU', title=f"IOU record of sample {sample_index} - run {run_index}")
+        ax.plot([record["iou_threshold"]]*record_size, "b--")
+        ax.fill_between(range(0, record_size),[0] * record_size, [record["iou_threshold"]]*record_size, color="red", alpha=0.2)
+        for chunk in track_chunks:
+            if len(chunk) != 1:
+                ax.plot(range(chunk[0], chunk[-1]+1), record["iou_records"][chunk[0]:chunk[-1]+1], "g")
+            else:
+                ax.scatter(chunk[0], record["iou_records"][chunk[0]], c="g")
+            ax.axvline(x=chunk[-1], color='y', linewidth=3, alpha=0.2)
