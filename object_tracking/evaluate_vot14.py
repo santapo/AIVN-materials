@@ -60,16 +60,16 @@ class VOT14Evaluator:
             # if frame_index < skip_frames:
             #     continue
             # print(frame_index)
+            if frame_index in skip_frames:
+                record["status"].append("skip")
+                record["iou_records"].append(0)
+                continue
             if reinitialize:
                 tracker = self.get_tracker(tracker_name)
                 tracker, polygon = self._init_tracker(tracker, sample, frame_index)
                 record["status"].append("reinitialize")
                 record["iou_records"].append(0)
                 reinitialize=False
-                continue
-            if frame_index in skip_frames:
-                record["status"].append("skip")
-                record["iou_records"].append(0)
                 continue
             if frame_index in ignore_frames:
                 record["status"].append("ignore")
