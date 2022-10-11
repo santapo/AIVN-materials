@@ -1,36 +1,58 @@
-from typing import List
+import logging
+from typing import Callable, List
 
 import cv2
 import numpy as np
 
-import logging
-
 logger = logging.getLogger()
 
 
-class Tracker:
-    def __init__(self, *args, **kwargs):
-        ...
+class BaseTracker:
+    def __init__(self, image: np.ndarray[np.int8], roi_window: List[int], tracker: Callable):
+        self.update_current_window(roi_window)
+        self.update_roi_feature(image)
+        self.tracker = tracker
 
-    def track(self, frame: np.ndarray, window: List[int]):
+    def update_roi_feature(self, image: np.ndarray[np.int8]):
         raise NotImplementedError
 
+    def update_current_window(self, window: List[int]):
+        self.current_window = window
 
-class ColorMSTracker(Tracker):
-    def __init__(self, tracked_window, term_crit=None):
-        super(ColorMSTracker, self).__init__()
+    def get_current_window(self) -> List[int]:
+        return self.current_window
 
-        hsv_roi = cv2.cvtColor(tracked_window, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(hsv_roi, np.array((0., 60., 32.)), np.array((180., 255., 255)))
-        self.roi_hist = cv2.calcHist([hsv_roi], [0], mask, [180], [0, 180])
-        self.roi_hist = cv2.normalize(self.roi_hist, None, 0, 255, cv2.NORM_MINMAX)
+    def get_probability_map(self, image: np.ndarray[np.int8]) -> np.ndarray[np.int8]:
+        self.probability_map = None
+        raise NotImplementedError
 
-        self.term_crit = term_crit
+    def track(self, frame: np.ndarray):
+        self.get_probability_map(frame)
+        _, new_window = self.tracker(self.probability_map, self.current_window)
+        self.update_current_window(new_window)
+
+
+class ColorTracker(BaseTracker):
+    def __init__(self, image: np.ndarray[np.int8], roi_window: List[int], tracker: Callable):
+        super(ColorTracker, self).__init__(image, roi_window, tracker)
         logger.info(f"Init {self.__class__.__name__} Successfully!")
 
-    def track(self, frame: np.ndarray, window: List[int]):
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        dst = cv2.calcBackProject([hsv], [0], self.roi_hist, [0, 180], 1)
-        # apply meanshift to get the new location
-        _, shifted_window = cv2.meanShift(dst, window, self.term_crit)
-        return shifted_window
+    def update_roi_feature(self, image: np.ndarray[np.int8]):
+        roi_image = image[self.current_window[1]: self.current_window[1] + self.current_window[3],
+                          self.current_window[0]: self.current_window[0] + self.current_window[2]]
+        roi_image = cv2.cvtColor(roi_image, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(roi_image, np.array((0., 60., 32.)), np.array((180., 255., 255)))
+        self.roi_hist = cv2.calcHist([roi_image], [0], mask, [180], [0, 180])
+        self.roi_hist = cv2.normalize(self.roi_hist, None, 0, 255, cv2.NORM_MINMAX)
+
+    def get_probability_map(self, image: np.ndarray[np.int8]) -> np.ndarray[np.int8]:
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        probability_map = cv2.calcBackProject([image], [0], self.roi_hist, [0, 180], 1)
+        return probability_map
+
+
+class HOGTracker(BaseTracker):
+    ...
+
+class SIFTTracker(BaseTracker):
+    ...
