@@ -8,12 +8,12 @@ logger = logging.getLogger()
 
 
 class BaseTracker:
-    def __init__(self, image: np.ndarray[np.int8], roi_window: List[int], tracker: Callable):
+    def __init__(self, image: np.ndarray, roi_window: List[int], tracker: Callable):
         self.update_current_window(roi_window)
         self.update_roi_feature(image)
         self.tracker = tracker
 
-    def update_roi_feature(self, image: np.ndarray[np.int8]):
+    def update_roi_feature(self, image: np.ndarray):
         raise NotImplementedError
 
     def update_current_window(self, window: List[int]):
@@ -22,8 +22,7 @@ class BaseTracker:
     def get_current_window(self) -> List[int]:
         return self.current_window
 
-    def get_probability_map(self, image: np.ndarray[np.int8]) -> np.ndarray[np.int8]:
-        self.probability_map = None
+    def get_probability_map(self, image: np.ndarray) -> np.ndarray:
         raise NotImplementedError
 
     def track(self, frame: np.ndarray):
@@ -33,11 +32,11 @@ class BaseTracker:
 
 
 class ColorTracker(BaseTracker):
-    def __init__(self, image: np.ndarray[np.int8], roi_window: List[int], tracker: Callable):
+    def __init__(self, image: np.ndarray, roi_window: List[int], tracker: Callable):
         super(ColorTracker, self).__init__(image, roi_window, tracker)
         logger.info(f"Init {self.__class__.__name__} Successfully!")
 
-    def update_roi_feature(self, image: np.ndarray[np.int8]):
+    def update_roi_feature(self, image: np.ndarray):
         roi_image = image[self.current_window[1]: self.current_window[1] + self.current_window[3],
                           self.current_window[0]: self.current_window[0] + self.current_window[2]]
         roi_image = cv2.cvtColor(roi_image, cv2.COLOR_BGR2HSV)
@@ -45,10 +44,10 @@ class ColorTracker(BaseTracker):
         self.roi_hist = cv2.calcHist([roi_image], [0], mask, [180], [0, 180])
         self.roi_hist = cv2.normalize(self.roi_hist, None, 0, 255, cv2.NORM_MINMAX)
 
-    def get_probability_map(self, image: np.ndarray[np.int8]) -> np.ndarray[np.int8]:
+    def get_probability_map(self, image: np.ndarray) -> np.ndarray:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-        probability_map = cv2.calcBackProject([image], [0], self.roi_hist, [0, 180], 1)
-        return probability_map
+        self.probability_map = cv2.calcBackProject([image], [0], self.roi_hist, [0, 180], 1)
+        return self.probability_map
 
 
 class HOGTracker(BaseTracker):
