@@ -5,6 +5,24 @@ import numpy as np
 from scipy.spatial import distance
 
 
+def get_2d_gaussian(size: List[int], fwhm: float = 3, center: List[float] = None):
+    x = np.expand_dims(np.arange(0, size[0], 1), axis=1)
+    y = np.expand_dims(np.arange(0, size[1], 1), axis=0)
+
+    if center is None:
+        x0 = y0 = size // 2
+    else:
+        x0 = center[1]
+        y0 = center[0]
+
+    return np.exp(-4*np.log(2) * ((x-x0)**2 + (y-y0)**2) / fwhm**2)
+
+def get_2d_mix_gaussian(size: List[int], fwhm_list: List[float], center_list = List[List[float]]):
+    mix_gaussian = 0
+    for fwhm, center in zip(fwhm_list, center_list):
+        mix_gaussian += get_2d_gaussian(size, fwhm, center)
+    return mix_gaussian
+
 def l2_distance(n: List[float], m: List[float]) -> float:
     if len(n) != len(m):
         raise "Inputs must have equal length"
