@@ -1,7 +1,14 @@
+from typing import List
+
 import cv2
 import numpy as np
 from scipy.spatial import distance
 
+
+def l2_distance(n: List[float], m: List[float]) -> float:
+    if len(n) != len(m):
+        raise "Inputs must have equal length"
+    return sum((y-x)**2 for x, y in zip(n, m)) ** 0.5
 
 def f_dst_weights(frame, x, y, w, h):
     X, Y, _ = frame.shape

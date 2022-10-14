@@ -1,5 +1,6 @@
 from .color_tracker import ColorTracker, NumpyColorTracker
-from .hog_tracker import HOGTracker
+from .hough_tracker import HOUGHTracker
 from .sift_tracker import SIFTTracker
+from .scale_space_tracker import ScaleSpaceTracker
 
-__all__ = ["ColorTracker", "NumpyColorTracker", "HOGTracker", "SIFTTracker"]
+__all__ = ["ColorTracker", "NumpyColorTracker", "HOUGHTracker", "SIFTTracker", "ScaleSpaceTracker"]
