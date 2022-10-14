@@ -1,5 +1,6 @@
 from typing import List
 
+
 def clamp(n, smallest, largest):
     return max(smallest, min(n, largest))
 
