@@ -1,4 +1,3 @@
-from decimal import DivisionByZero
 import logging
 from typing import Callable, List
 
@@ -11,8 +10,8 @@ logger = logging.getLogger()
 
 
 class ScaleSpaceTracker(BaseTracker):
-    def __init__(self, image: np.ndarray, roi_window: List[int], tracker: Callable, scale_range: List[int]):
-        super().__init__(image, roi_window, tracker)
+    def __init__(self, image: np.ndarray, roi_window: List[int], track_core: Callable, scale_range: List[int]):
+        super().__init__(image, roi_window, track_core)
         self.scale_range = scale_range
         self.scale_arr = np.arange(*self.scale_range)
         self.update_current_scale(scale=1)
@@ -50,7 +49,7 @@ class ScaleSpaceTracker(BaseTracker):
     def track(self, frame: np.ndarray, max_iters: int = 5, scale_eps: float = 1e-3, space_eps: float = 5):
         self.get_probability_map(frame)
         for _ in range(max_iters):
-            _, new_window = self.tracker(self.probability_map, self.current_window)
+            _, new_window = self.track_core(self.probability_map, self.current_window)
 
             x, y, w, h = [int(i) for i in new_window]
             scale_probability_map = self.scale_probability_map[:, y: y+h//2, x: x+w//2]

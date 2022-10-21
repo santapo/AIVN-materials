@@ -10,8 +10,8 @@ logger = logging.getLogger()
 
 
 class ColorTracker(BaseTracker):
-    def __init__(self, image: np.ndarray, roi_window: List[int], tracker: Callable):
-        super().__init__(image, roi_window, tracker)
+    def __init__(self, image: np.ndarray, roi_window: List[int], track_core: Callable):
+        super().__init__(image, roi_window, track_core)
         logger.info(f"Init {self.__class__.__name__} Successfully!")
 
     def update_roi_feature(self, image: np.ndarray):
@@ -29,8 +29,8 @@ class ColorTracker(BaseTracker):
 
 
 class NumpyColorTracker(BaseTracker):
-    def __init__(self, image: np.ndarray, roi_window: List[int], tracker: Callable):
-        super().__init__(image, roi_window, tracker)
+    def __init__(self, image: np.ndarray, roi_window: List[int], track_core: Callable):
+        super().__init__(image, roi_window, track_core)
         logger.info(f"Init {self.__class__.__name__} Successfully!")
 
     @staticmethod
