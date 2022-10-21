@@ -15,11 +15,11 @@ class ColorTracker(BaseTracker):
         logger.info(f"Init {self.__class__.__name__} Successfully!")
 
     def update_roi_feature(self, image: np.ndarray):
-        roi_image = image[self.current_window[1]: self.current_window[1] + self.current_window[3],
+        self.roi_image = image[self.current_window[1]: self.current_window[1] + self.current_window[3],
                           self.current_window[0]: self.current_window[0] + self.current_window[2]]
-        roi_image = cv2.cvtColor(roi_image, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(roi_image, np.array((0., 60., 32.)), np.array((180., 255., 255)))
-        self.roi_hist = cv2.calcHist([roi_image], [0], mask, [180], [0, 180])
+        self.roi_image = cv2.cvtColor(self.roi_image, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(self.roi_image, np.array((0., 60., 32.)), np.array((180., 255., 255)))
+        self.roi_hist = cv2.calcHist([self.roi_image], [0], mask, [180], [0, 180])
         self.roi_hist = cv2.normalize(self.roi_hist, None, 0, 255, cv2.NORM_MINMAX)
 
     def get_probability_map(self, image: np.ndarray) -> np.ndarray:

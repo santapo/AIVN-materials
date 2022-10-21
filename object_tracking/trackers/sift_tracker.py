@@ -31,9 +31,9 @@ class SIFTTracker(BaseTracker):
         return B
 
     def update_roi_feature(self, image: np.ndarray):
-        roi_image = image[self.current_window[1]: self.current_window[1] + self.current_window[3],
+        self.roi_image = image[self.current_window[1]: self.current_window[1] + self.current_window[3],
                           self.current_window[0]: self.current_window[0] + self.current_window[2]]
-        self.roi_image = cv2.cvtColor(roi_image, cv2.COLOR_BGR2HSV)
+        self.roi_image = cv2.cvtColor(self.roi_image, cv2.COLOR_BGR2HSV)
 
     def get_sift_map(self, image: np.ndarray) -> np.ndarray:
         sift = cv2.SIFT_create()
