@@ -49,15 +49,17 @@ class AdaTracker(BaseTracker):
     def track(self, frame: np.ndarray, max_iters: int = 5, scale_eps: float = 1e-3, space_eps: float = 5):
         self.get_probability_map(frame)
         for _ in range(max_iters):
-            _, new_window = self.track_core(self.probability_map, self.current_window)
+            window = [int(i) for i in self.current_window]
+            _, new_window = self.track_core(self.probability_map, window)
 
-            x, y, w, h = [int(i) for i in new_window]
+            x, y, w, h = new_window
             scale_probability_map = self.scale_probability_map[:, y: y+h//2, x: x+w//2]
             scale_probability_map = np.sum(scale_probability_map, axis=(1, 2))
 
             new_scale_index = np.argmax(scale_probability_map)
             new_scale = self.scale_arr[new_scale_index]
+            print(new_scale)
 
-            self.update_current_scale(new_scale)
+            self.update_current_scale(1.001**new_scale)
             new_window = [x, y, w*self.current_scale, h*self.current_scale]
             self.update_current_window(new_window)

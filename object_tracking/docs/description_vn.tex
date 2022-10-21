@@ -1,0 +1,134 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{vietnam}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=red,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{float}
+
+\setlength{\topmargin}{-.5in} \setlength{\textheight}{9.25in}
+\setlength{\oddsidemargin}{0in} \setlength{\textwidth}{6.8in}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{pythonhighlight}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{mycounter} % create a new counter, called 'mycounter'
+% default def'n of '\themycounter' is '\arabic{mycounter}'
+%% command to increment 'mycounter' by 1 and to display its value:
+\newcommand\showmycounter{\stepcounter{mycounter}\themycounter}
+\usepackage{lipsum}
+\newcommand\showlips{\stepcounter{mycounter}\lipsum[\value{mycounter}]}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{framed}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\LARGE AI VIET NAM – COURSE 2022}
+\author{\Huge Project: Single Object Tracking with Mean-shift}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\bfseries AI VIETNAM}
+\rhead{\bfseries  aivietnam.edu.vn}
+\fancyfoot[C]{\thepage}
+
+% \title{}
+% \author{Trong-Tuan Nguyen}
+% \date{October 2022}
+
+\begin{document}
+
+\maketitle
+
+\section*{Mô tả}
+
+\begin{figure}[H]
+    \includegraphics[width=9cm]{assets/image_1.png}
+    \centering
+    \caption{Appearance-Based Object Tracking}
+\end{figure}
+
+Object Tracking là một trong những bài toán quan trọng trong thị giác máy tính (Computer Vision) và có nhiều úng dụng quan trọng trong thực tế như theo dõi tình trạng giao thông, rô bốt, xe tự hình và nhiều ứng dụng khác. Các thuật toán đã được phát triển để giải quyết bài toán này từ các phương pháp cổ điển như Kanade-Lucas-Tomasi, Mean-shift, CAM-shift cho tới các phương pháp áp dụng Deep Learning như ROLO, DeepSORT. Trong project lần này, các bạn sẽ được giới thiệu tổng quan về bài toán Object Tracking, đặc biệt là Single Object Tracking và đi chi tiết vào hai thuật toán Mean-shift và CAM-shift cùng cách đo độ hiệu quả của các thuật toán Object Tracking. Ngoài ra, các biến thể của thuật toán Mean-shift và CAM-shift cũng sẽ được nhắc tới và cài đặt trong project lần này bao gồm sử dụng Hough Transform hoặc sử dụng đặc trực SIFT cho thuật toán Mean-shift. Điểm yếu của thuật toán Mean-shift về hình chữ nhật bao quanh vật thể bị cố định cũng được đề cập và giải quyết thông qua một số cách tiếp cận khác nhau. Cuối cùng, các thuật toán Object Tracking được nhắc tới trong project lần này sẽ được kiểm thử chất lượng trên bộ dữ liệu Visual Object Tracking 14 (VOT-14).
+
+\begin{figure}[H]
+    \includegraphics[width=8cm]{assets/image_2.png}
+    \centering
+    \caption{Minh họa thuật toán Mean-shift khi áp dụng vào bài toán Object Tracking}
+\end{figure}
+
+Tổng quát, project này sẽ bao gồm các nội dung sau:
+\begin{itemize}
+    \item Giới thiệu về Object Tracking và Single Object Tracking
+    \item Tìm hiểu chi tiết về thuật toán Mean-shift và ứng dụng
+    \item Thuật toán Mean-shift áp dụng vào bài toán Single Object Tracking
+    \item Thuật toán Mean-shift khi sử dụng các đặc trưng như SIFT và Hough Transform
+    \item Vấn đề hình chữ nhật bao quanh vật thể bị cố định của Mean-shift
+\end{itemize}
+
+\section*{Điều kiện tiên quyết}
+Để tiếp thu kiến thức trong project lần này, các bạn nên có hoặc chuẩn bị trước các kiến thức sau đây:
+\begin{itemize}
+    \item Có khả năng sử dụng Python và lập trình hướng đối tượng trong Python.
+    \item Quen thuộc với các gói và công cụ hỗ trợ trong Python như Numpy, OpenCV và Matplotlib hoặc các gói tương tự.
+    \item Familiar with some python packages like Numpy, OpenCV and Matplotlib or similiar.
+    \item Có kiến thức cơ bản về Giải tích và Lý thuyết xác suất
+    \item Có kiến thức cơ bản về Học Máy và Thị Giác Máy Tính
+\end{itemize}
+Các bạn có thể ôn luyện lại các kiến thức trên theo các nguồn sau:
+\begin{itemize}
+    \item https://realpython.com/python3-object-oriented-programming/
+    \item https://www.learndatasci.com/tutorials/applied-introduction-to-numpy-python-tutorial/
+    \item https://www.geeksforgeeks.org/matplotlib-tutorial/
+    \item https://www.youtube.com/watch?v=oXlwWbU8l2o
+    \item https://www.3blue1brown.com/topics/calculus
+    \item https://www.3blue1brown.com/topics/probability
+    \item https://www.probabilitycourse.com/
+\end{itemize}
+Ngoài ra, nếu các bạn đã tự tin với các kiến thức trên và muốn tìm hiểu trực tiếp về đề tài của project lần này thì có thể tham khảo các bài báo và blog sau đây:
+\begin{itemize}
+    \item \href{https://ieeexplore.ieee.org/document/400568}{Mean shift, mode seeking, and clustering}
+    \item \href{http://opencv.jp/opencv-1.0.0_org/docs/papers/camshift.pdf}{Computer Vision Face Tracking For Use in a Perceptual User Interface}
+    \item \href{https://mathisonian.github.io/kde/}{Kernel Density Estimation - Visual Explained}
+\end{itemize}
+\end{document}

@@ -55,10 +55,18 @@ class SIFTTracker(BaseTracker):
         center_list = [kp_tgt[m.trainIdx].pt for m in good]
         radius_list = [kp_tgt[m.trainIdx].size for m in good]
         self.sift_map = get_2d_mix_gaussian(image.shape[:2], radius_list, center_list)
+        # print(self.sift_map.shape)
+        if isinstance(self.sift_map, int):
+            self.sift_map = np.zeros(image.shape[:2])
+        self.sift_map = cv2.GaussianBlur(self.sift_map, (5, 5), 0)
+        # print(self.sift_map.shape)
         return self.sift_map
 
     def get_probability_map(self, image: np.ndarray) -> np.ndarray:
         image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         self.color_probability_map = self.numpy_backproject(image, self.roi_image)
         self.probability_map = self.color_probability_map + self.get_sift_map(image) * 255
+        # self. = self.get_sift_map(image) * 255
+        # if isinstance(self.sift_map, int):
+        #     import ipdb; ipdb.set_trace()
         return self.probability_map

@@ -1,0 +1,133 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=red,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{float}
+
+\setlength{\topmargin}{-.5in} \setlength{\textheight}{9.25in}
+\setlength{\oddsidemargin}{0in} \setlength{\textwidth}{6.8in}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{pythonhighlight}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{mycounter} % create a new counter, called 'mycounter'
+% default def'n of '\themycounter' is '\arabic{mycounter}'
+%% command to increment 'mycounter' by 1 and to display its value:
+\newcommand\showmycounter{\stepcounter{mycounter}\themycounter}
+\usepackage{lipsum}
+\newcommand\showlips{\stepcounter{mycounter}\lipsum[\value{mycounter}]}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{framed}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{\LARGE AI VIET NAM – COURSE 2022}
+\author{\Huge Project: Single Object Tracking with Mean-shift}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\bfseries AI VIETNAM}
+\rhead{\bfseries  aivietnam.edu.vn}
+\fancyfoot[C]{\thepage}
+
+% \title{}
+% \author{Trong-Tuan Nguyen}
+% \date{October 2022}
+
+\begin{document}
+
+\maketitle
+
+\section*{Description}
+
+
+\begin{figure}[H]
+    \includegraphics[width=9cm]{assets/image_1.png}
+    \centering
+    \caption{Appearance-Based Object Tracking}
+    \end{figure}
+
+Object tracking is one of the foremost assignments in computer vision that has numerous commonsense applications such as traffic monitoring, robotics, autonomous vehicle tracking, and so on. Algorithms for this task have been developed for decades from traditional methods like Kanade-Lucas-Tomasi, Mean-shift, CAM-shift to current Deep Learning based method like ROLO,  DeepSORT. In this project, we will first have a gentle introduction to Object Tracking (Single Object Tracking specifically) and its performance evaluation metrics, then deep dive into Mean-shift and CAM-shift in the later sections. The classic algorithms of Mean-shift and CAM-shift will not only putted in place and re-implemented from scratch, but also its variants including the combination of Mean-shift with Hough Transform or Scale-Invariant Feature Transform aka SIFT. The problem of fixed window size of Mean-shift will also be discussed. Finally, every considered Object Tracking algorithms in this project will be evaluated in Visual Object Tracking 14 (VOT-14) dataset to better see the improvements through the progress.
+
+\begin{figure}[H]
+    \includegraphics[width=8cm]{assets/image_2.png}
+    \centering
+    \caption{Mean-shift when applied in Single Object Tracking}
+\end{figure}
+
+To be summarized, this project will include the following contents:
+\begin{itemize}
+    \item Introduction to Object Tracking and Single Object Tracking
+    \item Deep dive into Mean-shift and its applications
+    \item Analysis Mean-shift in Single Object Tracking
+    \item Mean-shift with some advanced hand-crafted features
+    \item Mean-shift and its fixed window size problem
+\end{itemize}
+\section*{Prerequisites}
+For better in following this project, we highly recommend that you are already have had the below knowledges:
+\begin{itemize}
+    \item Familiar with Python programming language and OOP
+    \item Familiar with some python packages like Numpy, OpenCV and Matplotlib or similiar.
+    \item Basic knowledges in Calculus and Probability
+    \item Basic knowledges in Machine Learning and Computer vision
+\end{itemize}
+We have already prepared some references in the case you wanted to self-revive:
+\begin{itemize}
+    \item https://realpython.com/python3-object-oriented-programming/
+    \item https://www.learndatasci.com/tutorials/applied-introduction-to-numpy-python-tutorial/
+    \item https://www.geeksforgeeks.org/matplotlib-tutorial/
+    \item https://www.youtube.com/watch?v=oXlwWbU8l2o
+    \item https://www.3blue1brown.com/topics/calculus
+    \item https://www.3blue1brown.com/topics/probability
+    \item https://www.probabilitycourse.com/
+\end{itemize}
+For those want a directly jump in the topic:
+\begin{itemize}
+    \item \href{https://ieeexplore.ieee.org/document/400568}{Mean shift, mode seeking, and clustering}
+    \item \href{http://opencv.jp/opencv-1.0.0_org/docs/papers/camshift.pdf}{Computer Vision Face Tracking For Use in a Perceptual User Interface}
+    \item \href{https://mathisonian.github.io/kde/}{Kernel Density Estimation - Visual Explained}
+\end{itemize}
+\end{document}
