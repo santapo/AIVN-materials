@@ -1,3 +1,4 @@
+from curses import window
 import logging
 
 import cv2
@@ -26,26 +27,18 @@ class VOT14Evaluator:
     def get_tracker(self, tracker_name):
         return self.all_trackers[tracker_name]
 
-    def _init_tracker(self, tracker, sample, frame_index):
-        polygon = sample[1][frame_index]
-        frame = sample[0][frame_index]
-
-        roi = frame[polygon[1]:polygon[1] + polygon[3],
-                    polygon[0]:polygon[0] + polygon[2]]
-        term_crit = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1)
-        tracker = tracker(tracked_window=roi, term_crit=term_crit)
-        return tracker, polygon
-
     def evaluate_by_index(self,
                           tracker_name,
                           sample_index,
                           skip_after_reinit=5,
                           ignore_after_reinit=5,
                           iou_threshold=0.7):
-        tracker = self.get_tracker(tracker_name)
-
         sample = self.dataset_reader[sample_index]
-        tracker, polygon = self._init_tracker(tracker, sample, frame_index=0)
+        all_polygons_gt = sample[1]
+        all_frames = sample[0]
+
+        tracker = self.get_tracker(tracker_name)
+        tracker = tracker(image=all_frames[0], roi_window=all_polygons_gt[0])
 
         if not sample_index in self.all_records.keys():
             self.all_records[sample_index] = []
@@ -58,7 +51,7 @@ class VOT14Evaluator:
         reinitialize = False
         skip_frames = []
         ignore_frames = []
-        for frame_index, (frame, polygon_gt) in tqdm(enumerate(zip(sample[0], sample[1])), desc="Evaluating"):
+        for frame_index, (frame, polygon_gt) in tqdm(enumerate(zip(all_frames, all_polygons_gt)), desc="Evaluating"):
             # # skip first 5 frames
             # if frame_index < skip_frames:
             #     continue
@@ -69,7 +62,7 @@ class VOT14Evaluator:
                 continue
             if reinitialize:
                 tracker = self.get_tracker(tracker_name)
-                tracker, polygon = self._init_tracker(tracker, sample, frame_index)
+                tracker = tracker(image=frame, roi_window=polygon_gt)
                 record["status"].append("reinitialize")
                 record["iou_records"].append(0)
                 reinitialize=False
@@ -79,7 +72,8 @@ class VOT14Evaluator:
                 record["iou_records"].append(0)
                 continue
 
-            polygon = tracker.track(frame, polygon)
+            tracker.track(frame)
+            polygon = tracker.get_current_window()
             iou_value = compute_iou(polygon, polygon_gt)
             record["status"].append("track")
             record["iou_records"].append(iou_value)
